@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>App01</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+      .greenBorderClass{
+          border: 5px solid green
+      }
+  </style>    
+
+</head>
+<body >
+
+  <app-root></app-root>
+
+</body>
+</html>
+
+  // Parent component HTML file
+<div class="container" style="border:5px solid green">
+    <h1>Parent  Component</h1>
+    
+    Enter text: <input type="text" [(ngModel)]="t1"> <br>
+    <button
+    (click)='carry()'
+    >Carry to child</button>
+    {{childData}}
+    <app-child1
+            [var1]="getValue()"
+            (childEvent)='childData=$event'
+    >
+    </app-child1>
+    <br>
+        <br>
+    </div>
+    
+   // Parent component typescript file 
+    import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-parent',
+  templateUrl: './parent.component.html',
+  styleUrls: ['./parent.component.css']
+})
+export class ParentComponent implements OnInit {
+  msg:string='';
+  t1:string;
+  carry(){
+    this.msg = this.t1;
+  }
+  getValue(){
+    return this.msg
+  }
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
+
+// Child component HTML file
+<div class="container" style="border:5px solid blue;width:800px">
+  <h2>Child1 Component</h2>
+  {{var1}} <br>
+
+  Enter data: <input type="text" 
+  [(ngModel)]="t1"> <br>
+  <button
+  (click)='onChildAction()'
+  >Message to parent</button>
+</div>
+
+// child Component typescript file
+import { Component,Input, OnInit } from '@angular/core';
+import {  Output, EventEmitter } from '@angular/core';
+
+
+@Component({
+  selector: 'app-child1',
+  templateUrl: './child1.component.html',
+  styleUrls: ['./child1.component.css']
+})
+export class Child1Component implements OnInit {
+  @Input()
+  var1:string
+
+  @Output()
+  childEvent:any= new EventEmitter<string>();
+  t1:string='';
+  constructor() { }
+  onChildAction(){
+    this.childEvent.emit(this.t1);
+  }
+  ngOnInit() {
+  }
